@@ -26,6 +26,8 @@ select students.id,
     md5(random()::text)
 from generate_series(1, 10),
     students;
+-- vacuum and gather stats
+vacuum analyze;
 -- demo data
 select count(s.name)
 from students s
