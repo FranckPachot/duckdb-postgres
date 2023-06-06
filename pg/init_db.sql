@@ -12,6 +12,9 @@ create table exams (
     grade int,
     course text
 );
+-- add primary keys
+alter table students add primary key (id);
+alter table exams add primary key (sid,id);
 -- generate 100000 students
 insert into students (name)
 select md5(random()::text)
