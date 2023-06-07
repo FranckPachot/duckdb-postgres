@@ -45,3 +45,20 @@ docker-compose exec database psql --username demo_user --dbname demo
 # duckdb cli in duckdb container
 docker-compose run --build duck-database entrypoint.sh duckdb duck/students.db
 ```
+
+## YugabyteDB (Open Source PostgreSQL-compatible Distributed SQL database)
+
+With the `yb-database` service started in the docker compose:
+
+- schema creation:
+```
+docker-compose exec yb-database psql -e --username demo_user --dbname demo -f /tmp/pg/init_db.sql
+```
+
+Run the 3 queries:
+```
+for i in cte subquery window 
+do 
+docker-compose exec yb-database psql -e --username demo_user --dbname demo -f /tmp/pg/$i.sql 
+done
+```
