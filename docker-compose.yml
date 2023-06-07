@@ -1,3 +1,4 @@
+
 services:
   database:
     image: postgres:15.1
@@ -15,6 +16,29 @@ services:
     ports:
       - "5432:5432"
     restart: always
+
+  yb-database:
+    image: yugabytedb/yugabyte:latest
+    command: bash -c '
+     ln -s /usr/local/bin/ysqlsh /usr/local/bin/psql &&
+     rm -rf /tmp/.yb.0.0.0.0:5433 &&
+     echo "PGHOST=$$(hostname) PGPORT=5433" >> ~/.bashrc &&
+     YSQL_DB="$$PGDATABASE" YSQL_USER="$$PGUSER" YSQL_PASSWORD="$$PGPASSWORD" 
+      yugabyted start --advertise_address=0.0.0.0 --ui=false --tserver_flags="ysql_colocate_database_by_default=true,ysql_beta_features=true" &&
+     ysqlsh -c "alter database $$PGDATABASE set yb_bnl_batch_size=1024" -c "alter database $$PGDATABASE set enable_hashjoin=off" &&
+     tail -f /root/var/logs/yugabyted.log
+     '
+    environment:
+      PGDATABASE: demo
+      PGUSER: demo_user
+      PGPASSWORD: demo_password
+    volumes:
+      - ./pg:/tmp/pg
+    ports:
+      - 5433:5433
+      - 7000:7000
+      - 9000:9000
+      - 15433:15433
 
   duck-database:
     build: duck
