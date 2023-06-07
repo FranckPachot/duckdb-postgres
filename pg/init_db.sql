@@ -14,7 +14,7 @@ create table exams (
 );
 -- add primary keys
 alter table students add primary key (id);
-alter table exams add primary key (sid,id);
+alter table exams add primary key (id);
 -- generate 100000 students
 insert into students (name)
 select md5(random()::text)
@@ -26,6 +26,8 @@ select students.id,
     md5(random()::text)
 from generate_series(1, 10),
     students;
+-- secondary indexes
+create index exams_sid on exams (sid asc, grade asc);
 -- vacuum and gather stats
 vacuum analyze;
 -- demo data
