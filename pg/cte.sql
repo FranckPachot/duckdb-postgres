@@ -1,4 +1,4 @@
-explain analyze
+explain (analyze, buffers, verbose)
 select students.name,
     exams.course
 from students,

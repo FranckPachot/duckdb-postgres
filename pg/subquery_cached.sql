@@ -1,4 +1,4 @@
-explain analyze
+explain (analyze, buffers, verbose)
 select s.name,
     e.course
 from students_cache s,

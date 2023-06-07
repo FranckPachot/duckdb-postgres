@@ -1,4 +1,4 @@
-explain analyze
+explain (analyze, buffers, verbose)
 select name, course
 from (  
   select s.name,
